@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependecies as root
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # -----------------------
 # Runtime Stage
@@ -27,7 +27,7 @@ COPY app.py .
 COPY templates ./templates
 
 # Switch to non root user
-USE appuser
+USER appuser
 
 EXPOSE 5000
 
