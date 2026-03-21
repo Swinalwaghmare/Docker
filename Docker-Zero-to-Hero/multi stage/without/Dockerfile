@@ -10,4 +10,4 @@ COPY . .
 
 RUN CGO_ENABLE=0 go build -o /app . 
 
-ENTRYPOIN ["/app"]
+ENTRYPOINT ["/app"]
