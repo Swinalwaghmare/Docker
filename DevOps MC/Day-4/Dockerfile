@@ -1,0 +1,25 @@
+# RDS connection docker file with backend code
+FROM maven:3.9.9-amazoncorretto-11 AS builder
+
+WORKDIR /app
+
+COPY . /app 
+
+RUN mvn clean package -Dspring.profiles.active=build -DskipTests
+
+FROM amazoncorretto:11-alpine-jdk
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
+ENV SPRING_DATASOURCE_URL="jdbc:mysql://database-1.ckjyc24s4jgb.us-east-1.rds.amazonaws.com:3306/datastore?createDatabaseIfNotExist=true"
+ENV SPRING_DATASOURCE_USERNAME="admin"
+ENV SPRING_DATASOURCE_PASSWORD="Cloud123"
+ENV SPRING_JPA_HIBERNATE_DDL_AUTO="update"
+ENV SERVER_PORT=8084
+
+EXPOSE 8084
+
+
+CMD ["java", "-jar", "app.jar"]
